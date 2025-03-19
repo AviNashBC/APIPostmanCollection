@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "72b32607-c1c4-4b4d-a354-743c61008ed1",
+		"name": "02_GorestAPIs_DataDriven",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "1-Get all Users",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{gorestToken}}",
+						"description": "\n"
+					}
+				],
+				"url": {
+					"raw": "{{GorestBaseURL}}/public/v2/users",
+					"host": [
+						"{{GorestBaseURL}}"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2- Create new User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Check if the created user is with correct name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(pm.iterationData.get(\"name\"));\r",
+							"    pm.expect(jsonData.gender).to.eql(pm.iterationData.get(\"gender\"));\r",
+							"    pm.expect(jsonData.status).to.eql(pm.iterationData.get(\"status\"));\r",
+							"\r",
+							"    //fetch the email from the body to verify with json response\r",
+							"    //fetch email\r",
+							"    const bodyData = pm.request.body.raw;// json format --> need to convert it to JavaScript \r",
+							"    //json to JS \r",
+							"    const bodyDataJS = JSON.parse(bodyData);\r",
+							"    const emailExp = bodyDataJS.email;\r",
+							"    pm.expect(jsonData.email).to.eql(emailExp);\r",
+							"  \r",
+							"});\r",
+							"const jsonResponse = pm.response.json();\r",
+							"const userID = jsonResponse.id;\r",
+							"pm.variables.set(\"user_id\",userID);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{gorestToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "//name, gender and status will be provided from the csv file in the location \"C:\\Users\\avina\\Documents\\NaveenAutomation Jan2025\\TestData\\GorestNewUser.csv\"\r\n{\r\n    \"name\": \"{{name}}\",\r\n    \"gender\": \"{{gender}}\",\r\n    \"email\": \"AvinashBC_{{$randomUserName}}@gmail.com\",\r\n    \"status\": \"{{status}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GorestBaseURL}}/public/v2/users",
+					"host": [
+						"{{GorestBaseURL}}"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3- updateUserStatus",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Check the status is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(pm.iterationData.get(\"newStatus\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{gorestToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "//name, gender and status will be provided from the csv file in the location \"C:\\Users\\avina\\Documents\\NaveenAutomation Jan2025\\TestData\\GorestNewUser.csv\"\r\n{\r\n\r\n    \"status\": \"{{newStatus}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GorestBaseURL}}/public/v2/users/{{user_id}}",
+					"host": [
+						"{{GorestBaseURL}}"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gorestToken",
+			"value": "Bearer 548b5b3fac48ddf14cf817bb35dbc5777a21ce50e66f0ada205ff5e682c3d872",
+			"type": "string"
+		}
+	]
+}

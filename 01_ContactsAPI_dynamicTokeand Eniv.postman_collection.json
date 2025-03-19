@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "5ce11e5c-84a0-4cda-be73-8794414fbba3",
+		"name": "01_ContactsAPI_dynamicTokeand Eniv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "Login User-GetToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonResponse = pm.response.json();\r",
+							"const getloginToken =jsonResponse.token;\r",
+							"console.log(\"Bearer \" +getloginToken);\r",
+							"pm.collectionVariables.set(\"myTokenID\", \"Bearer \"+getloginToken);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURLContact}}/users/login",
+					"host": [
+						"{{baseURLContact}}"
+					],
+					"path": [
+						"users",
+						"login"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GETAllContacts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts?Authenticate=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg3MWE2NmY2ZDEzYzAwMTM3Y2IzMWEiLCJpYXQiOjE3Mzg5MTM3NzJ9.oMj4JJ4-dyifZxMHwW6N9zUEXeYWHXRMf6SAgSE2pPU",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "Authenticate",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg3MWE2NmY2ZDEzYzAwMTM3Y2IzMWEiLCJpYXQiOjE3Mzg5MTM3NzJ9.oMj4JJ4-dyifZxMHwW6N9zUEXeYWHXRMf6SAgSE2pPU"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Contact",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonResponse = pm.response.json();\r",
+							"const getNewID =jsonResponse._id;\r",
+							"console.log(\"New Cereated ID \"+ getNewID);\r",
+							"pm.collectionVariables.set(\"myUserID\", getNewID);\r",
+							"pm.variables.set(\"myUserID_Local\", getNewID);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Avinash\",\n    \"lastName\": \"NaveenAutomation_New\",\n    \"birthdate\": \"1990-01-01\",\n    \"email\": \"jobid@fake.com\",\n    \"phone\": \"01547954621\",\n    \"street1\": \"Karlheinzstr. 5\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"Ohio\",\n    \"postalCode\": \"99856\",\n    \"country\": \"Goregia\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a user by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if the User ID is correct\", function (){\r",
+							"   const newUserID = pm.variables.get(\"myUserID_Local\");\r",
+							"        var jsonData = pm.response.json();\r",
+							"        pm.expect(jsonData._id).to.eql(newUserID);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{myUserID_Local}}",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"{{myUserID_Local}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Contact",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Avinash\",\n    \"lastName\": \"SecondName\",\n    \"birthdate\": \"1990-01-01\",\n    \"email\": \"joebid@fake.com\",\n    \"phone\": \"01547954621\",\n    \"street1\": \"Karlheinzstr. 5\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"Ohio\",\n    \"postalCode\": \"99856\",\n    \"country\": \"Goregia\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{myUserID_Local}}",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"{{myUserID_Local}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Contact",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/{{myUserID_Local}}",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"{{myUserID_Local}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/users/logout?Authorization=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg3MWE2NmY2ZDEzYzAwMTM3Y2IzMWEiLCJpYXQiOjE3Mzg5MTQyMjd9.YFXAptOkYJreKLwXZMdCnrpL4AY5d1-nFby0H88Ne9c",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"logout"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg3MWE2NmY2ZDEzYzAwMTM3Y2IzMWEiLCJpYXQiOjE3Mzg5MTQyMjd9.YFXAptOkYJreKLwXZMdCnrpL4AY5d1-nFby0H88Ne9c"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "myTokenID",
+			"value": ""
+		},
+		{
+			"key": "myUserID",
+			"value": ""
+		}
+	]
+}

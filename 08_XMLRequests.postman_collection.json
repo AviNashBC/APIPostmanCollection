@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "2ecc327d-3f63-46dc-88cc-8d860bbcf23d",
+		"name": "08_XMLRequests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "1-SendXMLRequestBodyUsingScript",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let options ={\r",
+							"    'method':'POST',\r",
+							"    'url':'https://httpbin.org/post',\r",
+							"    'headers':{\r",
+							"        'Content-Type': 'application/xml'\r",
+							"    },\r",
+							"    body:`<?xml version=\"1.0\"?>\r",
+							"    <items>\r",
+							"        <item>\r",
+							"        <full_name>Clifton Jaskolski</full_name>\r",
+							"        <phone>+1 787-347-2484</phone>\r",
+							"        <email>clifton75@hotmail.com</email>\r",
+							"        <currency>$ 7,566,419</currency>\r",
+							"        <number>8318787</number>\r",
+							"        <price>{{price}}</price>\r",
+							"        </item>\r",
+							"\r",
+							"        <item>\r",
+							"        <full_name>Kellie Thiel</full_name>\r",
+							"        <phone>+1 517-566-8914</phone>\r",
+							"        <email>kellie.thiel@hotmail.com</email>\r",
+							"        <currency>$ 2,094,157</currency>\r",
+							"        <number>8483211</number>\r",
+							"        <price>{{price}}</price>\r",
+							"        </item>\r",
+							"        \r",
+							"        <item>\r",
+							"        <full_name>Laurence Schimmel</full_name>\r",
+							"        <phone>+1 332-103-4923</phone>\r",
+							"        <email>laurence41@gmail.com</email>\r",
+							"        <currency>$ 7,285,029</currency>\r",
+							"        <number>3996718</number>\r",
+							"        <price>{{price}}</price>\r",
+							"        </item>\r",
+							"    </items>`\r",
+							"};\r",
+							"\r",
+							"const priceData = pm.iterationData.get('price');\r",
+							" console.log(priceData);\r",
+							"//options.body=options.body.replace('{{price}}', priceData);// will replace only the first price in the XML with first itteration data \r",
+							"  options.body = options.body.replace(/{{price}}/g, priceData);// '/g': global regular expression\r",
+							"\r",
+							"\r",
+							"\r",
+							"//======================================================\r",
+							"pm.sendRequest(options, function(error, response){\r",
+							"    if(error){\r",
+							"        console.log(error);\r",
+							"    }\r",
+							"    else{\r",
+							"        console.log(response.status);\r",
+							"    }\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "this is my XML",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/post",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-GetAllUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//xml2js  -- lib in postman\r",
+							"const xml2js = require('xml2js');\r",
+							"const xmlResponse = pm.response.text();\r",
+							"\r",
+							"//Parsins the XML\r",
+							"xml2js.parseString(xmlResponse, function(error, response){\r",
+							"    if(error){\r",
+							"        console.log(\"error in parsing the XML Data\", error);\r",
+							"    }\r",
+							"    console.log('pased XML: ' , response);\r",
+							"    \r",
+							"    pm.test('check total users count is 10', function(){\r",
+							"        pm.expect(response.objects.object.length).to.eql(10);\r",
+							"    });\r",
+							"\r",
+							"    pm.test('fetch all users ids and check the count', function(){\r",
+							"        const userIds = response.objects.object.map(e => e.id[0]._);\r",
+							"        console.log(userIds);\r",
+							"        pm.expect(userIds.length).to.eql(10);\r",
+							"    });\r",
+							"\r",
+							"    pm.test('fetch all users names and check the count', function(){\r",
+							"        const names = response.objects.object.map(e => e.name[0]);\r",
+							"        console.log(names);\r",
+							"        pm.expect(names.length).to.eql(10);\r",
+							"    });\r",
+							"\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users.xml",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users.xml"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-GetAUserByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//xml2js -- lib in postman",
+							"const xml2js = require('xml2js');",
+							"const xmlContent = pm.response.text();",
+							"console.log(xmlContent);",
+							"",
+							"xml2js.parseString(xmlContent, function(error, response){",
+							"    if(error){",
+							"        console.log('error in parsing xml', error);",
+							"    }",
+							"",
+							"    console.log(response);//parsed xml ---> JS  Object",
+							"",
+							"    pm.test('check user data', function(){",
+							"        pm.expect(response.hash.name[0]).to.eql(\"Manjusha Bhat Sr.\");",
+							"        pm.expect(response.hash.status[0]).to.eql('active');",
+							"",
+							"    })",
+							"",
+							"",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/7765960.xml",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"7765960.xml"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

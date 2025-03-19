@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "24efe4ae-3f07-4535-bb02-163a505d2b0d",
+		"name": "03_ContactsAPI_dataDrivenApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "1-Login_GenToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonResponse = pm.response.json();\r",
+							"const getloginToken =jsonResponse.token;\r",
+							"console.log(\"Bearer \" +getloginToken);\r",
+							"pm.collectionVariables.set(\"myTokenID\", \"Bearer \"+getloginToken);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURLContact}}/users/login",
+					"host": [
+						"{{baseURLContact}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-CreatenewUser_CSV",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"const jsonResponse = pm.response.json();\r",
+							"console.log(\"The newly Created ID\" + jsonResponse._id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{myTokenID}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg3MWE2NmY2ZDEzYzAwMTM3Y2IzMWEiLCJpYXQiOjE3NDA0NjEzNTV9.3Ha0fpfCPhSMtoMBFWBfZDoACCw1j2oMDVpZkPjeceg"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"{{firstName}}\",\n    \"lastName\": \"{{lastName}}\",\n    \"birthdate\": \"{{dob}}\",\n    \"email\": \"AvinashBC_{{$randomEmail}}\",\n    \"phone\": \"{{$randomPhoneNumber}}\",\n    \"street1\": \"{{$randomStreetName}}\",\n    \"street2\": \"{{$randomStreetAddress}}\",\n    \"city\": \"{{$randomCity}}\",\n    \"stateProvince\": \"{{stateName}}\",\n    \"postalCode\": \"{{postalCode}}\",\n    \"country\": \"{{$randomCountry}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "myTokenID",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,308 @@
+{
+	"info": {
+		"_postman_id": "b0951ad3-7a43-4faa-8b0c-bf9db96e1f18",
+		"name": "05_PostmanImportantScripts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "1-AddHeadersUsingScript",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//1. Header is in always in th form of Key and Header format\r",
+							"//  pm.request.headers.add({\r",
+							"//     key: \"x-Avinash\",\r",
+							"//     value: \"Null\"\r",
+							"//  })\r",
+							"\r",
+							"//2. Multiple Headers at the same time\r",
+							"const myHeaders = [\r",
+							"    {key: 'x-Chrome', value : '133'},\r",
+							"    {key: 'x-FireFox', value : '130'},\r",
+							"    {key: 'x-Edge', value : '135'}\r",
+							"]\r",
+							"myHeaders.forEach(element => pm.request.headers.add(element));// element will fetch each key and value pairs form the myHeaders array object and add using the pm.request.headers.add();"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 548b5b3fac48ddf14cf817bb35dbc5777a21ce50e66f0ada205ff5e682c3d872"
+					}
+				],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-RemoveHeadersUsingScript",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.remove(\"x-Avinash_remove\");\r",
+							"//remove multiple headers usinga myHeaders2Remove using ForEach"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 548b5b3fac48ddf14cf817bb35dbc5777a21ce50e66f0ada205ff5e682c3d872"
+					},
+					{
+						"key": "x-Avinash_remove",
+						"value": "Null",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-UpdateHeadersUsingScript",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.request.headers.upsert({\r",
+							"    key: \"x-Avinash_remove\",\r",
+							"    value: \"Not Null andy more\"\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 548b5b3fac48ddf14cf817bb35dbc5777a21ce50e66f0ada205ff5e682c3d872"
+					},
+					{
+						"key": "x-Avinash_remove",
+						"value": "Null",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-ParserHTMLResponseUsingCheerioAPI",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// cheerio -- used to parse the HTML response\r",
+							"\r",
+							"const myCheerio = require('cheerio');\r",
+							"\r",
+							"pm.test(\"Check if the text is in HTML return : The Internet\", function () {\r",
+							"     pm.expect(pm.response.text()).to.include('The Internet');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Check if the text is in HTML return : Login form\", function () {\r",
+							"    const resVar = myCheerio.load(pm.response.text());\r",
+							"    //console.log(\"response Text ==>\" + resVar);\r",
+							"    const loginForm = resVar('[name = \"login\"]');\r",
+							"    console.log(\"Login Form ==>\"+ loginForm);\r",
+							"    const formActionAttr = loginForm.attr(\"action\");\r",
+							"   // console.log(\"Form Action ==>\" + formActionAttr);\r",
+							"\r",
+							"    //loginForm.find('#username');\r",
+							"    console.log(\"length/number of time the html code had username :  \"+loginForm.find('#username').length);\r",
+							"    pm.expect(loginForm.find(\"#username\").length).to.be.eql(1);\r",
+							"    pm.expect(loginForm.find(\"#password\").length).to.be.eql(1);\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://the-internet.herokuapp.com/login",
+					"protocol": "https",
+					"host": [
+						"the-internet",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5- AddDelyaBeforeResponse",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(()=>{},5000)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 548b5b3fac48ddf14cf817bb35dbc5777a21ce50e66f0ada205ff5e682c3d872"
+					}
+				],
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

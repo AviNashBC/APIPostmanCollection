@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "d92c387c-849a-4a78-a3b8-6c78140e296b",
+		"name": "00_ContactsAPI Copy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "Login User-GetToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"naveenanimation20@gmail.com\",\r\n    \"password\": \"test@123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/users/logout",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GETAllContacts",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a user by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67acb0713e06b10013fe9107",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"67acb0713e06b10013fe9107"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a Contact",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Avinash\",\n    \"lastName\": \"NaveenAutomation\",\n    \"birthdate\": \"1990-01-01\",\n    \"email\": \"jobid@fake.com\",\n    \"phone\": \"01547954621\",\n    \"street1\": \"Karlheinzstr. 5\",\n    \"street2\": \"Apartment A\",\n    \"city\": \"Springfield\",\n    \"stateProvince\": \"Ohio\",\n    \"postalCode\": \"99856\",\n    \"country\": \"Goregia\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Contact",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"cypress\",\n    \"lastName\": \"api\",\n    \"birthdate\": \"1999-01-01\",\n    \"email\": \"cypress@gmail.com\",\n    \"phone\": \"9898987778\",\n    \"city\": \"Bangalore\",\n    \"country\": \"India\",\n    \"stateProvince\": \"KA\",\n    \"street1\": \"abc street\",\n    \"street2\": \"pest\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67acb0713e06b10013fe9107",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"67acb0713e06b10013fe9107"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Contact",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67a4d617168ad20013437fc0",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"67a4d617168ad20013437fc0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch a Contact",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{vault:contactstoken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"lastName\": \"testing\",\n    \"email\": \"zainabtestmng@gmail.com\",\n    \"phone\": \"9090909090\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinking-tester-contact-list.herokuapp.com/contacts/67a4e1cf168ad20013438025",
+					"protocol": "https",
+					"host": [
+						"thinking-tester-contact-list",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"contacts",
+						"67a4e1cf168ad20013438025"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

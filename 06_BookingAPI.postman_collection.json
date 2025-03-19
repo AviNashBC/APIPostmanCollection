@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "4d0c59bf-1c65-4d5b-bbed-7a76c608da66",
+		"name": "06_BookingAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41823652"
+	},
+	"item": [
+		{
+			"name": "1-GenerateToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// const responseJson = pm.response.json();\r",
+							"// console.log(\"Token Value -->\" + responseJson.token);\r",
+							"// pm.variables.set(\"toke_id\", responseJson.token);\r",
+							"\r",
+							"// pm.test(\"Status code is 200\", function () {\r",
+							"//     pm.response.to.have.status(200);\r",
+							"// });\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\" : \"{{username}}\",\n    \"password\" : \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-GetBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/booking",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3-CreateNewBooking",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const bookingID = pm.response.json().bookingid;\r",
+							"console.log(\"New Booking ID -->\" + bookingID);\r",
+							"pm.variables.set(\"booking_id\", bookingID);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Avinash\",\n    \"lastname\" : \"Dash\",\n    \"totalprice\" : 215,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2025-05-01\",\n        \"checkout\" : \"2025-05-15\"\n    },\n    \"additionalneeds\" : \"Breakfast\"\n\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/booking",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4-GetbookingByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//assignment:\r",
+							"// call the post api to create a booking using the script:\r",
+							"// and fetch the booking id and sore in a variable.\r",
+							"\r",
+							"\r",
+							"//generate a tike usind auth API and fetch the toke from the response\r",
+							"pm.sendRequest({\r",
+							"    method: 'POST',\r",
+							"    url: pm.environment.get(\"baseURL\")+'/booking',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body:{\r",
+							"        mode: 'raw',\r",
+							"        //javascript object to json\r",
+							"        raw: JSON.stringify({\r",
+							"            \"firstname\" : \"Jim-Avinash\",\r",
+							"            \"lastname\" : \"Brown_Avinash\",\r",
+							"            \"totalprice\" : 111,\r",
+							"            \"depositpaid\" : true,\r",
+							"            \"bookingdates\" : {\r",
+							"                \"checkin\" : \"2018-01-01\",\r",
+							"                \"checkout\" : \"2019-01-01\"\r",
+							"            },\r",
+							"            \"additionalneeds\" : \"Breakfast\"\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"}, function (error, response){\r",
+							"    if(error){\r",
+							"        console.log(error);\r",
+							"    }\r",
+							"    else{\r",
+							"        //JSON to JS Object\r",
+							"        const responseBody = JSON.parse(response.text());\r",
+							"        const bookingID = responseBody.bookingid;\r",
+							"        console.log(\"Bookin ID fetched from Pre-Req Script: \"+ bookingID);\r",
+							"        pm.variables.set(\"new_booking_id\", bookingID);\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/booking/{{new_booking_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"booking",
+						"{{new_booking_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5-UpdateBooknByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//generate a tike usind auth API and fetch the toke from the response\r",
+							"pm.sendRequest({\r",
+							"    method: 'POST',\r",
+							"    url: pm.environment.get(\"baseURL\")+'/auth',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body:{\r",
+							"        mode: 'raw',\r",
+							"        //javascript object to json\r",
+							"        raw: JSON.stringify({\r",
+							"            \"username\" : pm.environment.get(\"username\"),\r",
+							"            \"password\" : pm.environment.get(\"password\")\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"}, function (error, response){\r",
+							"    if(error){\r",
+							"        console.log(error);\r",
+							"    }\r",
+							"    else{\r",
+							"        //JSON to JS Object\r",
+							"        const responseBody = JSON.parse(response.text());\r",
+							"        const tokenID = responseBody.token;\r",
+							"        console.log(\"Token ID fetched from Pre-Req Script: \"+ tokenID);\r",
+							"        pm.variables.set(\"new_token_id\", tokenID);\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{new_token_id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstname\" : \"Avinash_NewName\",\n    \"lastname\" : \"Dash_Update\",\n    \"totalprice\" : 181,\n    \"depositpaid\" : true,\n    \"bookingdates\" : {\n        \"checkin\" : \"2018-01-01\",\n        \"checkout\" : \"2019-01-01\"\n    },\n    \"additionalneeds\" : \"Breakfast and Dinner\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/booking/{{booking_id}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"booking",
+						"{{booking_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6-DeleteBookingByID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//generate a tike usind auth API and fetch the toke from the response\r",
+							"pm.sendRequest({\r",
+							"    method: 'POST',\r",
+							"    url: pm.environment.get(\"baseURL\")+'/auth',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json',\r",
+							"    },\r",
+							"    body:{\r",
+							"        mode: 'raw',\r",
+							"        //javascript object to json\r",
+							"        raw: JSON.stringify({\r",
+							"            \"username\" : pm.environment.get(\"username\"),\r",
+							"            \"password\" : pm.environment.get(\"password\")\r",
+							"        })\r",
+							"\r",
+							"    }\r",
+							"}, function (error, response){\r",
+							"    if(error){\r",
+							"        console.log(error);\r",
+							"    }\r",
+							"    else{\r",
+							"        //JSON to JS Object\r",
+							"        const responseBody = JSON.parse(response.text());\r",
+							"        const tokenID = responseBody.token;\r",
+							"        console.log(\"Token ID fetched from Pre-Req Script: \"+ tokenID);\r",
+							"        pm.variables.set(\"new_token_id\", tokenID);\r",
+							"    }\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{new_token_id}}"
+					}
+				],
+				"url": {
+					"raw": "https://restful-booker.herokuapp.com/booking/{{booking_id}}",
+					"protocol": "https",
+					"host": [
+						"restful-booker",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"booking",
+						"{{booking_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
